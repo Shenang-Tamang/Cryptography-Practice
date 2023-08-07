@@ -1,4 +1,4 @@
-text = "Shenang Tamang"      
+text = "SHENANG TAMANG"      
 key = int(input("Enter the key: "))
     
 
