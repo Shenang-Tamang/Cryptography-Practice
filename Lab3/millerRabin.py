@@ -1,44 +1,39 @@
-import math
 import random
 
+def is_prime_miller_rabin(n, k):
+    if n <= 1:
+        return False
+    if n <= 3:
+        return True
+
+    # Express n as 2^r * d + 1
+    r, d = 0, n - 1
+    while d % 2 == 0:
+        r += 1
+        d //= 2
+
+    # Witness loop
+    for _ in range(k):
+        a = random.randint(2, n - 2)
+        x = pow(a, d, n)
+
+        if x == 1 or x == n - 1:
+            continue
+
+        for _ in range(r - 1):
+            x = pow(x, 2, n)
+            if x == n - 1:
+                break
+        else:
+            return False
+
+    return True
+
 if __name__ == "__main__":
-    n = int(input("Enter test number: "))
-    rounds = int(input("Enter no of rounds: "))
-    u = 1
-    primeProbab = 0
-    notPrimeProbab = 0
-    k = 1
-    
-#a number is even then it is composite
-    if(n % 2 == 0 and n != 2): 
-        print(f"{n} is  a composite number.")
-#could be composite
+    n = int(input("Enter a number to test for primality: "))
+    k = int(input("Enter the number of rounds (recommended: 5): "))
+
+    if is_prime_miller_rabin(n, k):
+        print(f"{n} is likely a prime number.")
     else:
-        #n-1 = u * s^k
-        while((n-1) % (2 ** k) == 0):
-            k+= 1
-        k -= 1
-
-#required no of rounds
-    for _ in range(rounds):
-        u = (n-1) / (2 ** k)
-        a = random.randint(2, n-1)
-        b = (a ** u) % n
-
-        print(f"k: {k}, u: {u}, a: {a}, b:{b}")
-
-        if(b == 1 or b == n-1):
-            primeProbab += 1
-        
-        for i in range(k):
-            b = (b**b) % n
-            if(b == n-1):
-                primeProbab += 1
-            if(b == 1):
-                notPrimeProbab += 1
-    
-    print(f"Prime Probability: {primeProbab}\nNot Prime Probability: {notPrimeProbab}")
-
-
-
-
+        print(f"{n} is a composite number.")

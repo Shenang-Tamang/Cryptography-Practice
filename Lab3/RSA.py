@@ -6,7 +6,7 @@ def gcd(a, b):
         return a
     return gcd(b, a%b)
 
-def alice():
+def bob():
     p, q = input("Enter two prime numbers: ").split()
     p = int(p)
     q = int(q)
@@ -26,14 +26,14 @@ def alice():
             privatekey = i
             break
 
-    message = bob(n, publicKey)
-    print(f"Encrypted message by Bob: {message}")
+    message = alice(n, publicKey)
+    print(f"Encrypted message by Alice: {message}")
     message = (message ** privatekey) % n
-    print(f"Decrypted message by Alice: {message}")
+    print(f"Decrypted message by Bob: {message}")
 
-def bob(n, publicKey):
+def alice(n, publicKey):
     msg = int(input(f"Enter a message to send BoB less than {n}: "))
     return (msg ** publicKey) % n 
 
 if __name__ == "__main__":
-    alice() 
+    bob() 

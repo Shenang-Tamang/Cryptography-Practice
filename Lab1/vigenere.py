@@ -1,50 +1,30 @@
-# Python code to implement
-# Vigenere Cipher
+plain_text = input("Enter the plain text: ").replace(" ", "").upper()
 
-# This function generates the
-# key in a cyclic manner until
-# it's length isn't equal to
-# the length of original text
-def generateKey(string, key):
-	key = list(key)
-	if len(string) == len(key):
-		return(key)
-	else:
-		for i in range(len(string) -
-					len(key)):
-			key.append(key[i % len(key)])
-	return("" . join(key))
-	
-# This function returns the
-# encrypted text generated
-# with the help of the key
-def cipherText(string, key):
-	cipher_text = []
-	for i in range(len(string)):
-		x = (ord(string[i]) +
-			ord(key[i])) % 26
-		x += ord('A')
-		cipher_text.append(chr(x))
-	return("" . join(cipher_text))
-	
-# This function decrypts the
-# encrypted text and returns
-# the original text
-def originalText(cipher_text, key):
-	orig_text = []
-	for i in range(len(cipher_text)):
-		x = (ord(cipher_text[i]) -
-			ord(key[i]) + 26) % 26
-		x += ord('A')
-		orig_text.append(chr(x))
-	return("" . join(orig_text))
-	
-# Driver code
-if __name__ == "__main__":
-	string = "SHENANG TAMANG"
-	keyword = "AYUSH"
-	key = generateKey(string, keyword)
-	cipher_text = cipherText(string,key)
-	print("Ciphertext :", cipher_text)
-	print("Original/Decrypted Text :",
-		originalText(cipher_text, key))
+alphabets = {chr(65 + i): i for i in range(26)}
+rev_alphabets = {val: key for key, val in alphabets.items()}
+
+key = input("Enter the key: ").replace(" ", "").upper()
+key = (key + key * int(len(plain_text) / len(key)))[: len(plain_text)]
+
+encrypted_text = decrypted_text = ""
+
+for char, keyChar in zip(plain_text, key):
+    encr = (alphabets[char] + alphabets[keyChar]) % 26
+    encrypted_text += rev_alphabets[encr]
+
+print("Encrypted Text: ",encrypted_text)
+
+for char, keyChar in zip(encrypted_text, key):
+    decr = (alphabets[char] - alphabets[keyChar]) % 26
+    decrypted_text += rev_alphabets[decr]
+
+print("Decrypted Text: ",decrypted_text)
+
+
+# To generate Vigenere table
+# maxm = max(key)
+# alphabets_ = list(chr(i) for i in range(65, ord(maxm)+1))
+# v_table = [alphabets_[i:] + alphabets_[:i] for i in range(len(alphabets_))]
+
+# for row in v_table:
+#     print(row)

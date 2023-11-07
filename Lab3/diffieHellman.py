@@ -1,18 +1,20 @@
-def findKey(yReceived, xAssumed, n):
-    return (yReceived ** xAssumed) % n
+import random as r
 
-if __name__ == "__main__":
-    # alpha=13 
-    # n = 257
-    alpha = int(input("Enter the alpha for both alice and bob: "))
-    n = int(input("Enter the n for both alice and bob: "))
-    
-    xA, xB = 23, 57
-    
-    yA = (alpha ** xA) % n
-    yB = (alpha ** xB) % n
-    
-    keyA = findKey(yB, xA, n)
-    keyB = findKey(yA, xB, n)
-    
-    print("Key A: ", keyA, "\nKey B: ",keyB)
+def calculateKey(y, x, q):
+    return (y**x) % q
+
+q = int(input("Enter a prime number (q): "))
+
+alpha = int(input("Enter a primitive root of q (alpha): "))
+
+xA = r.randint(1, q)
+xB = r.randint(1, q)
+
+yA = (alpha**xA) % q
+yB = (alpha**xB) % q
+
+kA = calculateKey(yB, xA, q)
+kB = calculateKey(yA, xB, q)
+
+print("Public key of A (kA): ", kA)
+print("Public key of B (kB): ", kB)

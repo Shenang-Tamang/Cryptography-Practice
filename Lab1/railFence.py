@@ -1,44 +1,50 @@
-def rail_fence_encrypt(message, rail_count):
-    encrypted_message = [''] * rail_count
-    direction = -1  # Direction for zigzag pattern: -1 for going up, 1 for going down
-    row = 0
+def getCipher(text, rails):
+    ciphertext = ""
+    length_row = 0
+    extra_char = 0
 
-    for char in message:
-        encrypted_message[row] += char
-        if row == 0 or row == rail_count - 1:
-            direction *= -1  # Change direction at the edges of the zigzag pattern
-        row += direction
+    # choosing in what interval a text is to be selected to arrange in a row.
+    for i in range(rails):
+        ctext = ""
+        for j in range(i, len(text), rails):
+            ctext += text[j]
 
-    return ''.join(encrypted_message)
+        if i == 0:
+            length_row = len(ctext)  # setting length of first row to add extra alphabets later in other rows to match dimension
 
-def rail_fence_decrypt(encrypted_message, rail_count):
-    message_length = len(encrypted_message)
-    decrypted_message = [''] * message_length
-    direction = -1  # Direction for zigzag pattern: -1 for going up, 1 for going down
-    row = 0
+        if i != 0 and len(ctext) < length_row:
+            ctext += "X"  # adding extra alphabet
+            extra_char += 1
 
-    # Generate the rail order to reconstruct the original message
-    rail_order = sorted(range(message_length), key=lambda x: (x % (2 * rail_count - 2), x))
+        ciphertext += ctext # concatenating the finalised cipher part of a row into cipertext
 
-    for i in range(message_length):
-        decrypted_message[rail_order[i]] = encrypted_message[i]
-        if row == 0 or row == rail_count - 1:
-            direction *= -1  # Change direction at the edges of the zigzag pattern
-        row += direction
+        print(ctext)
 
-    return ''.join(decrypted_message)
+    return ciphertext, extra_char
 
-if __name__ == "__main__":
-    # Get the message from the user
-    message = input("Enter the message to encrypt: ")
 
-    # Define the number of rails for encryption and decryption
-    rail_count = 3
+# Decipher
+def getDecipher(text, rails):
+    deciphertext = ""
+    length = int(len(text) / rails)
 
-    # Perform encryption
-    encrypted_message = rail_fence_encrypt(message, rail_count)
-    print(f"Encrypted message: {encrypted_message}")
+    # Outer loop runs through the length of columns
+    for i in range(0, length):
+        # Inner loop runs though the rows of columns
+        for j in range(0, rails):
+            deciphertext += text[length * j + i]  # formula to extract alphabets from correct positions.
 
-    # Perform decryption using the same encrypted text
-    decrypted_message = rail_fence_decrypt(encrypted_message, rail_count)
-    print(f"Decrypted message: {decrypted_message}")
+    return deciphertext
+
+
+# Input
+plain_text = input("Enter the plain text: ").upper().replace(" ", "")
+rails = int(input("Enter the rails: "))
+
+# Ciphered Text
+cipher_text, extra = getCipher(plain_text, rails)
+print("Ciphered Text: " + cipher_text)
+
+# Deciphered Text
+decipher_text = getDecipher(cipher_text, rails)
+print("Deciphered Text: " + decipher_text[:len(cipher_text)-extra])

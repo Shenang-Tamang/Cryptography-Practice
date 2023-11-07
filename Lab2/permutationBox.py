@@ -33,7 +33,7 @@ if __name__ == "__main__":
 
     print(f"The output of the initial permutation box for {data} is \n{iBoxOutput}.\n")
     print(f"The output of the final permutation box for {data} is \n{fBoxOutput}")
-    
+
 
 
 
